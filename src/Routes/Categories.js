@@ -5,9 +5,11 @@ const {
   createCategory,
   getAllCategories
 } = require("../Services/CategoriesSerivce");
+const { authenticate } = require("../Services/AuthService");
 
 router.post(
   "/api/categories",
+  authenticate,
   tryCatch((req, res) => {
     const body = req.body;
     createCategory(body);

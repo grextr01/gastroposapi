@@ -1,8 +1,13 @@
 const express = require("express");
 const path = require("path");
 const { tryCatch, tryCatchAsync } = require("../Services/utils/TryCatch");
+const { authenticate } = require("../Services/AuthService");
 const router = express.Router();
-const { createProduct } = require("../Services/ProductsService");
+const {
+  createProduct,
+  getProducts,
+  getProductById
+} = require("../Services/ProductsService");
 const { validateProducts } = require("../Services/utils/Validator");
 const sharp = require("sharp");
 const multer = require("multer");
@@ -12,8 +17,34 @@ const upload = multer({
   storage: s
 });
 
+router.get(
+  "/api/products",
+  authenticate,
+  tryCatch((req, res) => {
+    const products = getProducts();
+    return res.status(200).json({
+      products
+    });
+  })
+);
+
+router.get(
+  "/api/products/:id",
+  tryCatch((req, res) => {
+    const productId = req.params.id;
+    const product = getProductById(parseInt(productId));
+    if (!product) {
+      return res.status(404).json({
+        message: "Product was not found"
+      });
+    }
+    return res.status(200).json(product);
+  })
+);
+
 router.post(
   "/api/products",
+  authenticate,
   upload.fields([
     {
       name: "productImage",

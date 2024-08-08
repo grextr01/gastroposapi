@@ -5,10 +5,12 @@ app.use(express.json());
 const PORT = process.env.PORT || 3030;
 const Categories = require("./Routes/Categories");
 const Products = require("./Routes/Products");
+const Auth = require("./Routes/Auth");
 const errorHandler = require("./Services/utils/ErrorHanlder");
 
 app.use(Categories);
 app.use(Products);
+app.use(Auth);
 app.use(express.static("public"));
 app.use(errorHandler);
 app.listen(PORT, () => {

@@ -12,6 +12,24 @@ const createProduct = (product, image) => {
   }
 };
 
+const getProducts = () => {
+  const query =
+    "SELECT p.id,title,p.description,Price,c.description as Category,Image FROM Products p JOIN Categories c ON p.Category = c.id";
+  const rows = db.prepare(query).all();
+  return rows;
+};
+
+const getProductById = id => {
+  const prodcuts = getProducts();
+  const product = prodcuts.filter(product => product.id === id);
+  if (product.length === 0) {
+    return null;
+  }
+  return product[0];
+};
+
 module.exports = {
-  createProduct
+  createProduct,
+  getProducts,
+  getProductById
 };

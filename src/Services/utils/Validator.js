@@ -21,7 +21,14 @@ const ProductSchema = Joi.object({
   Price: Joi.number().required(),
   Category: Joi.number().required()
 });
+const UserSchema = Joi.object({
+  Name: Joi.string().required(),
+  email: Joi.string().required(),
+  password: Joi.string().min(8).required(),
+  admin: Joi.number().required()
+});
 
 module.exports = {
-  validateProducts: validator(ProductSchema)
+  validateProducts: validator(ProductSchema),
+  validateUser: validator(UserSchema)
 };
