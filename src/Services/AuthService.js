@@ -41,10 +41,27 @@ const authenticate = (req, res, next) => {
       throw new Error();
     }
     req.userId = decodedToken.userId;
+    req.admin = decodedToken.admin;
     next();
   } catch (err) {
     return res.status(401).json({
       message: "UnAuthorized"
+    });
+  }
+};
+
+const authorize = (req, res, next) => {
+  try {
+    const admin = req.admin;
+    if (admin !== 1) {
+      return res.status(401).json({
+        message: "Unauthorized action"
+      });
+    }
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      message: "Unauthorized action"
     });
   }
 };
@@ -94,5 +111,7 @@ const hashPassword = password => {
 module.exports = {
   createUser,
   validateLogin,
-  authenticate
+  authenticate,
+  hashPassword,
+  authorize
 };

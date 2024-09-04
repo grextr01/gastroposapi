@@ -28,7 +28,21 @@ const UserSchema = Joi.object({
   admin: Joi.number().required()
 });
 
+const UpdateUserSchema = Joi.object({
+  Name: Joi.string().required(),
+  email: Joi.string().required()
+});
+const newPasswordSchema = Joi.object({
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().min(8).required(),
+  RePassword: Joi.string()
+    .required()
+    .valid(Joi.ref("newPassword"))
+    .messages({ "any.only": "Passwords do not match" })
+});
 module.exports = {
   validateProducts: validator(ProductSchema),
-  validateUser: validator(UserSchema)
+  validateUser: validator(UserSchema),
+  validatePasswordUpdate: validator(newPasswordSchema),
+  validUserInfoUpdate: validator(UpdateUserSchema)
 };
